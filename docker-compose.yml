@@ -34,11 +34,15 @@ services:
       - ./http-server-projeto-korp.conf:/etc/nginx/conf.d/default.conf
     restart: always
 
-  grafana:
+ grafana:
     image: grafana/grafana:latest
     container_name: grafana
     networks:
       - korp-network
     ports:
       - "3000:3000"
+    volumes:
+      - ./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./http-server-projeto-korp-dashboard.json:/etc/grafana/provisioning/dashboards/http-server-projeto-korp-dashboard.json
     restart: always
