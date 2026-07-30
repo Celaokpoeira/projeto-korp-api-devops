@@ -19,10 +19,8 @@ services:
       - korp-network
     ports:
       - "80:80"
-   volumes:
-      - ./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
-      - ./dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
-      - ./http-server-projeto-korp-dashboard.json:/var/lib/grafana/dashboards/http-server-projeto-korp-dashboard.json
+    volumes:
+      - ./http-server-projeto-korp.conf:/etc/nginx/conf.d/default.conf
     restart: always
 
   prometheus:
@@ -46,5 +44,5 @@ services:
     volumes:
       - ./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
       - ./dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
-      - ./http-server-projeto-korp-dashboard.json:/etc/grafana/provisioning/dashboards/http-server-projeto-korp-dashboard.json
+      - ./http-server-projeto-korp-dashboard.json:/var/lib/grafana/dashboards/http-server-projeto-korp-dashboard.json
     restart: always
