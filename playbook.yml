@@ -1,0 +1,43 @@
+---
+- name: Provisionamento completo do ambiente do Projeto Korp
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Atualizar o cache de pacotes APT
+      apt:
+        update_cache: yes
+
+    - name: Baixar o script oficial de instalação do Docker
+      get_url:
+        url: https://get.docker.com
+        dest: /tmp/get-docker.sh
+        mode: '0755'
+
+    - name: Instalar o Docker no ambiente Linux
+      shell: /tmp/get-docker.sh
+      args:
+        creates: /usr/bin/docker
+
+    - name: Instalar o plugin do Docker Compose
+      apt:
+        name: docker-compose-plugin
+        state: present
+
+    - name: Subir a infraestrutura completa utilizando o Docker Compose
+      command: docker compose up -d --build
+      args:
+        chdir: "/root/projeto-korp"
+
+    - name: Aguardar a estabilização do serviço HTTP
+      pause:
+        seconds: 5
+
+    - name: Testar o funcionamento do serviço via requisição HTTP
+      uri:
+        url: "http://localhost/projeto-korp"
+        return_content: yes
+      register: api_response
+
+    - name: Exibir a resposta da API no console
+      debug:
+        msg: "Sucesso! Resposta do endpoint -> {{ api_response.json }}"
