@@ -50,7 +50,7 @@ services:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
-      - monitoramento-network
+      - korp-network
 
   promtail:
     image: grafana/promtail:latest
@@ -60,7 +60,7 @@ services:
       - ./promtail-config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
     networks:
-      - monitoramento-network
+      - korp-network
     depends_on:
       - loki    
 
